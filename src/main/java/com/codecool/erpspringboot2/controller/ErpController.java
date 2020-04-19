@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -34,7 +35,6 @@ public class ErpController {
     @GetMapping("/incoming-delivery/uncompleted")
     public List<IncomingDelivery> displayUncompletedIncomingDelivery(){
         return incomingDeliveryService.getAllUncompletedIncomingDelivery();
-
     }
 
     @PostMapping("/incoming-delivery/add")
@@ -44,8 +44,10 @@ public class ErpController {
     }
 
     @PostMapping("/inventory/add/{id}")
-    public void addToInventory(@PathVariable("id") Long id,@RequestBody IncomingDelivery incomingDelivery){
+    public Inventory addToInventory(@PathVariable("id") Long id) throws Exception {
+        IncomingDelivery incomingDelivery = this.incomingDeliveryService.getIncomingDeliveryById(id);
+        incomingDeliveryService.incomingCompleted(inventoryService.getInvetory(), incomingDelivery);
 
+        return inventoryService.getInvetory();
     }
-
 }

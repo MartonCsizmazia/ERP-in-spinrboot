@@ -24,7 +24,6 @@ public class Product {
     private String manufacturer;
     private int price;
     private double profit;
-    private int stock_quant;
 
 
 }

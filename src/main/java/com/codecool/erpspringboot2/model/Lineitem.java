@@ -38,7 +38,6 @@ public class Lineitem {
 /*
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private UserOrder userOrder;
-
  */
 
     private Long idOfPackage;

@@ -41,14 +41,5 @@ public class IncomingDelivery {
     //@OneToMany(cascade = {CascadeType.REMOVE})
     private List<Lineitem> incomingLineitems;
 
-    public void addToInventory(Inventory inventory){
-        for (Lineitem incomingLineitem : incomingLineitems) {
-            inventory.getStockLineitems().add(incomingLineitem);
-        }
-    }
 
-    public void incomingCompleted(Inventory inventory){
-        addToInventory(inventory);
-        this.status = Status.COMPLETED;
-    }
 }
