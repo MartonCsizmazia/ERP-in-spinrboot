@@ -156,6 +156,7 @@ public class ErpSpringboot2Application {
 
 
             Lineitem lineitem7 = Lineitem.builder()
+                    .mergedToStock(true)
                     .product(modernWarfare)
                     .quantity(0)
                     .build();

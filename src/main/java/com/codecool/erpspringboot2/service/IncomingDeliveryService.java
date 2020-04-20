@@ -3,6 +3,7 @@ package com.codecool.erpspringboot2.service;
 import com.codecool.erpspringboot2.model.*;
 import com.codecool.erpspringboot2.repository.IncomingDeliveryRepository;
 import com.codecool.erpspringboot2.repository.LineitemRepository;
+import com.codecool.erpspringboot2.repository.ProductRepository;
 import com.codecool.erpspringboot2.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class IncomingDeliveryService {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     public List<IncomingDelivery> getAllIncomingDelivery(){
         return incomingDeliveryRepository.findAll();
     }
@@ -37,40 +41,34 @@ public class IncomingDeliveryService {
         return incomingDeliveryRepository.findAllById(id).get(0);
     }
 
+    public void chekcForExistingProduct(List<Lineitem> lineitemList, Lineitem lineitem) {
+        for (Lineitem newStockLineitem : lineitemList) {
+            if (newStockLineitem.getProduct().getId().equals(lineitem.getProduct().getId())) {
+                int sum = newStockLineitem.getQuantity();
+                sum += lineitem.getQuantity();
+                lineitem.setMergedToStock(true);
+                newStockLineitem.setQuantity(sum);
+                break;
+            }
+        }
+    }
+
     public void mergeToStockRepository(IncomingDelivery incomingDelivery) {
         Stock stock = stockService.getStock();
-
         List<Lineitem> newStockLineitems = new ArrayList<>();
-
         List<Long> idOfNewStockProducts = new ArrayList<>();
-
         List<Long> idOfStockProducts = new ArrayList<>();
+
         for (Lineitem stockLineitem : stock.getStockLineitems()) {
             idOfStockProducts.add(stockLineitem.getProduct().getId());
         }
 
         for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {
             if(idOfNewStockProducts.contains(incomingLineitem.getProduct().getId())){
-                for (Lineitem newStockLineitem : newStockLineitems) {
-                    if (newStockLineitem.getProduct().getId() ==incomingLineitem.getProduct().getId()){
-                        int sum = newStockLineitem.getQuantity();
-                        sum += incomingLineitem.getQuantity();
-                        incomingLineitem.setMergedToStock(true);
-                        newStockLineitem.setQuantity(sum);
-                        break;
-                    }
-                }
+                chekcForExistingProduct(newStockLineitems, incomingLineitem);
             }
             else if(idOfStockProducts.contains(incomingLineitem.getProduct().getId())){
-                for (Lineitem stockLineitem : stock.getStockLineitems()) {
-                    if (stockLineitem.getProduct().getId() ==incomingLineitem.getProduct().getId()){
-                        int sum = stockLineitem.getQuantity();
-                        sum += incomingLineitem.getQuantity();
-                        incomingLineitem.setMergedToStock(true);
-                        stockLineitem.setQuantity(sum);
-                        break;
-                    }
-                }
+                chekcForExistingProduct(stock.getStockLineitems(), incomingLineitem);
             } else {
                 System.out.println("BUILDING");
                 Lineitem lineitem = Lineitem.builder()
@@ -99,20 +97,47 @@ public class IncomingDeliveryService {
 
     }
 
-    public IncomingDelivery addIncomingDelivery(IncomingDelivery paramIncomingDelivery){
+    public IncomingDelivery addIncomingDelivery(IncomingDelivery paramIncomingDelivery) throws Exception {
         IdCreator.fakeDeliveryNumber += 1;
         List<Lineitem> paramincomingLineitems = paramIncomingDelivery.getIncomingLineitems();
         List<Lineitem> incomingLineitems = new ArrayList<>();
+
+        List<Product> productList = productRepository.findAll();
+        List<String> nameList = new ArrayList<>();
+
+        for (Product product : productList) {
+            nameList.add(product.getName());
+        }
+
         for (Lineitem incomingLineitem : paramincomingLineitems) {
-            Lineitem lineitem = Lineitem.builder()
-                    .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
-                    .product(incomingLineitem.getProduct())
-                    .quantity(incomingLineitem.getQuantity())
-                    .build();
-            incomingLineitems.add(lineitem);
-            //this.lineitemRepository.save(lineitem);
-            //NE SAVELD, KÜLÖNBEN
-            //PersistentObjectException: detached entity passed to persist
+            if(productList.contains(incomingLineitem.getProduct())) {
+                Lineitem lineitem = Lineitem.builder()
+                        .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                        .product(incomingLineitem.getProduct())
+                        .quantity(incomingLineitem.getQuantity())
+                        .build();
+                incomingLineitems.add(lineitem);
+                //this.lineitemRepository.save(lineitem);
+                //NE SAVELD, KÜLÖNBEN
+                //PersistentObjectException: detached entity passed to persist
+            } else {
+                if(nameList.contains(incomingLineitem.getProduct().getName())){
+                    throw new Exception("There is already a Oroduct with this name");
+                }
+                Product product = Product.builder()
+                        .name(incomingLineitem.getProduct().getName())
+                        .price(incomingLineitem.getProduct().getPrice())
+                        .profit(incomingLineitem.getProduct().getProfit())
+                        .manufacturer(incomingLineitem.getProduct().getManufacturer())
+                        .build();
+                productRepository.save(product);
+                Lineitem lineitem = Lineitem.builder()
+                        .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                        .product(product)
+                        .quantity(incomingLineitem.getQuantity())
+                        .build();
+                incomingLineitems.add(lineitem);
+            }
         }
 
         IncomingDelivery incomingDelivery = IncomingDelivery.builder()
@@ -138,4 +163,5 @@ public class IncomingDeliveryService {
 
         return incomingDelivery;
     }
+
 }

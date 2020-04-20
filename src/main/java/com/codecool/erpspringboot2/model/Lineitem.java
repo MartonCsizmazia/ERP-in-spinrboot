@@ -18,9 +18,11 @@ public class Lineitem {
     @GeneratedValue
     private Long id;
 
+    private int quantity;
+
     @ManyToOne
     private Product product;
-    private int quantity;
+
 
     private boolean mergedToStock = false;
 
