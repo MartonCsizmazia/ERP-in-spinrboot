@@ -124,11 +124,11 @@ public class ErpSpringboot2Application {
                     .status(Status.ENROUTE)
                     .build();
 
+            incomingDeliveryRepository.save(incomingDelivery1);
+
             lineitem1.setIDofIncomingDelivery(incomingDelivery1.getId());
             lineitem2.setIDofIncomingDelivery(incomingDelivery1.getId());
             lineitem3.setIDofIncomingDelivery(incomingDelivery1.getId());
-
-            incomingDeliveryRepository.save(incomingDelivery1);
 
             cargoPrinter(incomingDelivery1);
             IdCreator.fakeDeliveryNumber += 1;
@@ -156,9 +156,8 @@ public class ErpSpringboot2Application {
 
 
             Lineitem lineitem7 = Lineitem.builder()
-                    .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
                     .product(modernWarfare)
-                    .quantity(12)
+                    .quantity(0)
                     .build();
 
             Stock stock = Stock.builder()

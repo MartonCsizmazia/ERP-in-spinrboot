@@ -31,7 +31,7 @@ public class Lineitem {
     private IncomingDelivery incomingDelivery;
 
     private Long IDofIncomingDelivery;
-    private Long IDofInventory;
+    private Long IDofStock;
     private Long IDofUserOrder;
 
 

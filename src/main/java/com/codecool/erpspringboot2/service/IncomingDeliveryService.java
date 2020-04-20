@@ -37,20 +37,6 @@ public class IncomingDeliveryService {
         return incomingDeliveryRepository.findAllById(id).get(0);
     }
 
-    public void addToInventory(IncomingDelivery incomingDelivery){
-        for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {
-            System.out.println(incomingLineitem.getProduct().getName());
-            System.out.println(incomingLineitem.getQuantity());
-
-        }
-        System.out.println(incomingDelivery.getIncomingLineitems().size());
-
-
-        mergeToStockRepository(incomingDelivery);
-    }
-
-
-
     public void mergeToStockRepository(IncomingDelivery incomingDelivery) {
         Stock stock = stockService.getStock();
 
@@ -102,21 +88,16 @@ public class IncomingDeliveryService {
     }
 
 
-
-
-
-
     public void incomingCompleted(IncomingDelivery incomingDelivery) throws Exception {
         if(incomingDelivery.getStatus()==Status.COMPLETED){
             throw new Exception("This delivery is already added");
         } else {
-            addToInventory(incomingDelivery);
+            mergeToStockRepository(incomingDelivery);
             incomingDelivery.setStatus(Status.COMPLETED);
             incomingDeliveryRepository.save(incomingDelivery);
         }
 
     }
-
 
     public IncomingDelivery addIncomingDelivery(IncomingDelivery paramIncomingDelivery){
         IdCreator.fakeDeliveryNumber += 1;
@@ -145,7 +126,6 @@ public class IncomingDeliveryService {
             incomingLineitem.setIncomingDelivery(incomingDelivery);
         }
          */
-
 
         this.incomingDeliveryRepository.save(incomingDelivery);
         System.out.println("THIS IS AND ID "+incomingDelivery.getId());

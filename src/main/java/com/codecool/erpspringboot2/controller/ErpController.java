@@ -36,6 +36,5 @@ public class ErpController {
     public void addToInventory(@PathVariable("id") Long id) throws Exception {
         IncomingDelivery incomingDelivery = this.incomingDeliveryService.getIncomingDeliveryById(id);
         incomingDeliveryService.incomingCompleted(incomingDelivery);
-
     }
 }
