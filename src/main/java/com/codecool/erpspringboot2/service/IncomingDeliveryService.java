@@ -1,10 +1,7 @@
 package com.codecool.erpspringboot2.service;
 
 import com.codecool.erpspringboot2.model.*;
-import com.codecool.erpspringboot2.repository.IncomingDeliveryRepository;
-import com.codecool.erpspringboot2.repository.LineitemRepository;
-import com.codecool.erpspringboot2.repository.ProductRepository;
-import com.codecool.erpspringboot2.repository.StockRepository;
+import com.codecool.erpspringboot2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +25,9 @@ public class IncomingDeliveryService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     public List<IncomingDelivery> getAllIncomingDelivery(){
         return incomingDeliveryRepository.findAll();
@@ -92,12 +92,15 @@ public class IncomingDeliveryService {
         } else {
             mergeToStockRepository(incomingDelivery);
             incomingDelivery.setStatus(Status.COMPLETED);
+            for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {
+                incomingLineitem.setMergedToStock(true);
+                lineitemRepository.save(incomingLineitem);
+            }
             incomingDeliveryRepository.save(incomingDelivery);
         }
-
     }
 
-    public IncomingDelivery addIncomingDelivery(IncomingDelivery paramIncomingDelivery) throws Exception {
+    public void addIncomingDelivery(IncomingDelivery paramIncomingDelivery) throws Exception {
         IdCreator.fakeDeliveryNumber += 1;
         List<Lineitem> paramincomingLineitems = paramIncomingDelivery.getIncomingLineitems();
         List<Lineitem> incomingLineitems = new ArrayList<>();
@@ -139,6 +142,15 @@ public class IncomingDeliveryService {
                 incomingLineitems.add(lineitem);
             }
         }
+        int price = 0;
+        for (Lineitem incomingLineitem : incomingLineitems) {
+            price += incomingLineitem.getProduct().getPrice()*incomingLineitem.getQuantity();
+        }
+
+        Expense expense = Expense.builder()
+                .value(price)
+                .build();
+        expenseRepository.save(expense);
 
         IncomingDelivery incomingDelivery = IncomingDelivery.builder()
                 .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
@@ -160,8 +172,5 @@ public class IncomingDeliveryService {
             //incomingLineitem.setIncomingDelivery(incomingDelivery); //NOT WORKING(stack owerlow)
             lineitemRepository.save(incomingLineitem);
         }
-
-        return incomingDelivery;
     }
-
 }

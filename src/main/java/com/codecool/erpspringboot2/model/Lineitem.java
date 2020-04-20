@@ -23,7 +23,6 @@ public class Lineitem {
     @ManyToOne
     private Product product;
 
-
     private boolean mergedToStock = false;
 
     private long fakeDeliveryKey;
@@ -33,7 +32,7 @@ public class Lineitem {
     private IncomingDelivery incomingDelivery;
 
     private Long IDofIncomingDelivery;
-    private Long IDofStock;
+
     private Long IDofUserOrder;
 
 

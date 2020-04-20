@@ -18,9 +18,12 @@ public class Expense {
     @GeneratedValue
     private Long id;
 
-    @NonNull
+    private boolean PAID = false;
+
     private String name;
     private int value;
     private LocalDate date;
+
+
 
 }

@@ -1,8 +1,10 @@
 package com.codecool.erpspringboot2.controller;
 
 import com.codecool.erpspringboot2.model.IncomingDelivery;
+import com.codecool.erpspringboot2.model.Product;
 import com.codecool.erpspringboot2.model.Stock;
 import com.codecool.erpspringboot2.service.IncomingDeliveryService;
+import com.codecool.erpspringboot2.service.ProductService;
 import com.codecool.erpspringboot2.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,17 @@ public class ErpController {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/incoming-delivery")
     public List<IncomingDelivery> displayAllIncomingDelivery(){
         return incomingDeliveryService.getAllIncomingDelivery();
+    }
+
+    @GetMapping("/products")
+    public List<Product> displayAllProducts(){
+        return productService.getAllProduct();
     }
 
     @GetMapping("/stock")

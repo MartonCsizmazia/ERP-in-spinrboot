@@ -27,7 +27,7 @@ public class IncomingDelivery {
     private Status status;
 
     @OneToOne
-    private Expense incomingDeliveryPrice;
+    private Expense incomingDeliveryExpense;
 
     @Singular
     @EqualsAndHashCode.Exclude

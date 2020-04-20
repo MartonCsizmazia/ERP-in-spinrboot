@@ -35,7 +35,8 @@ public class ErpSpringboot2Application {
     @Autowired
     private StockRepository stockRepository;
 
-
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     @Bean
     @Profile("production")
@@ -115,9 +116,17 @@ public class ErpSpringboot2Application {
             lineitemRepository.save(lineitem1);
             lineitemRepository.save(lineitem2);
             lineitemRepository.save(lineitem3);
- */
+ */         int price = lineitem1.getProduct().getPrice()*lineitem1.getQuantity()+
+                    lineitem2.getProduct().getPrice()*lineitem2.getQuantity()+
+                    lineitem3.getProduct().getPrice()*lineitem3.getQuantity();
+            Expense expense = Expense.builder()
+                    .value(price)
+                    .build();
+            expenseRepository.save(expense);
+
             IncomingDelivery incomingDelivery1 = IncomingDelivery.builder()
                     .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
+                    .incomingDeliveryExpense(expense)
                     .incomingLineitem(lineitem1)
                     .incomingLineitem(lineitem2)
                     .incomingLineitem(lineitem3)
@@ -181,7 +190,7 @@ public class ErpSpringboot2Application {
                 System.out.println("Product: " + outgoingLineitem.getProduct().getName() + "    Quantity: "+ outgoingLineitem.getQuantity()+"\n");
             }
         } else if (object.getClass().equals(Stock.class)) {
-            System.out.println("INVENTORY"+ "\n");
+            System.out.println("STOCK"+ "\n");
             for (Lineitem stockLineitem : ((Stock) object).getStockLineitems()) {
                 System.out.println("Product: " + stockLineitem.getProduct().getName() + "    Quantity: " + stockLineitem.getQuantity() + "\n");
             }
