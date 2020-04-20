@@ -1,15 +1,12 @@
 package com.codecool.erpspringboot2.controller;
 
 import com.codecool.erpspringboot2.model.IncomingDelivery;
-import com.codecool.erpspringboot2.model.Inventory;
 import com.codecool.erpspringboot2.service.IncomingDeliveryService;
-import com.codecool.erpspringboot2.service.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -17,15 +14,7 @@ import java.util.Optional;
 public class ErpController {
 
     @Autowired
-    private InventoryService inventoryService;
-
-    @Autowired
     private IncomingDeliveryService incomingDeliveryService;
-
-    @GetMapping("/inventory")
-    public Inventory displayInventory(){
-        return inventoryService.getInvetory();
-    }
 
     @GetMapping("/incoming-delivery")
     public List<IncomingDelivery> displayAllIncomingDelivery(){
@@ -44,10 +33,9 @@ public class ErpController {
     }
 
     @PostMapping("/inventory/add/{id}")
-    public Inventory addToInventory(@PathVariable("id") Long id) throws Exception {
+    public void addToInventory(@PathVariable("id") Long id) throws Exception {
         IncomingDelivery incomingDelivery = this.incomingDeliveryService.getIncomingDeliveryById(id);
-        incomingDeliveryService.incomingCompleted(inventoryService.getInvetory(), incomingDelivery);
+        incomingDeliveryService.incomingCompleted(incomingDelivery);
 
-        return inventoryService.getInvetory();
     }
 }

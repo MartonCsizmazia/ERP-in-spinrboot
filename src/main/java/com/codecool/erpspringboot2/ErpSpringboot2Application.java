@@ -33,7 +33,7 @@ public class ErpSpringboot2Application {
     private LineitemRepository lineitemRepository;
 
     @Autowired
-    private InventoryRepository inventoryRepository;
+    private StockRepository stockRepository;
 
 
 
@@ -152,17 +152,21 @@ public class ErpSpringboot2Application {
             lineitemRepository.save(lineitem5);
             lineitemRepository.save(lineitem6);
 
-            Inventory inventory = Inventory.builder()
-                    .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
-                    .stockLineitem(lineitem4)
-                    .stockLineitem(lineitem5)
-                    .stockLineitem(lineitem6)
 
+
+
+            Lineitem lineitem7 = Lineitem.builder()
+                    .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                    .product(modernWarfare)
+                    .quantity(12)
                     .build();
 
-            inventoryRepository.save(inventory);
+            Stock stock = Stock.builder()
+                    .stockLineitem(lineitem7)
+                    .build();
+            stockRepository.save(stock);
 
-            cargoPrinter(inventory);
+            cargoPrinter(stock);
         };
     }
 
@@ -176,9 +180,9 @@ public class ErpSpringboot2Application {
             for (Lineitem outgoingLineitem : ((UserOrder) object).getOutgoingLineitems()) {
                 System.out.println("Product: " + outgoingLineitem.getProduct().getName() + "    Quantity: "+ outgoingLineitem.getQuantity()+"\n");
             }
-        } else if (object.getClass().equals(Inventory.class)) {
+        } else if (object.getClass().equals(Stock.class)) {
             System.out.println("INVENTORY"+ "\n");
-            for (Lineitem stockLineitem : ((Inventory) object).getStockLineitems()) {
+            for (Lineitem stockLineitem : ((Stock) object).getStockLineitems()) {
                 System.out.println("Product: " + stockLineitem.getProduct().getName() + "    Quantity: " + stockLineitem.getQuantity() + "\n");
             }
             System.out.println("/////////////////////////////////////");

@@ -1,19 +1,14 @@
 package com.codecool.erpspringboot2.service;
 
-import com.codecool.erpspringboot2.model.IncomingDelivery;
-import com.codecool.erpspringboot2.model.Inventory;
-import com.codecool.erpspringboot2.model.Lineitem;
-import com.codecool.erpspringboot2.model.Status;
+import com.codecool.erpspringboot2.model.*;
 import com.codecool.erpspringboot2.repository.IncomingDeliveryRepository;
-import com.codecool.erpspringboot2.repository.InventoryRepository;
 import com.codecool.erpspringboot2.repository.LineitemRepository;
-import net.bytebuddy.implementation.bytecode.Throw;
+import com.codecool.erpspringboot2.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class IncomingDeliveryService {
@@ -22,10 +17,13 @@ public class IncomingDeliveryService {
     private IncomingDeliveryRepository incomingDeliveryRepository;
 
     @Autowired
-    private InventoryRepository inventoryRepository;
+    private LineitemRepository lineitemRepository;
 
     @Autowired
-    private LineitemRepository lineitemRepository;
+    private StockRepository stockRepository;
+
+    @Autowired
+    private StockService stockService;
 
     public List<IncomingDelivery> getAllIncomingDelivery(){
         return incomingDeliveryRepository.findAll();
@@ -39,21 +37,80 @@ public class IncomingDeliveryService {
         return incomingDeliveryRepository.findAllById(id).get(0);
     }
 
-    public void addToInventory(Inventory inventory, IncomingDelivery incomingDelivery){
+    public void addToInventory(IncomingDelivery incomingDelivery){
         for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {
             System.out.println(incomingLineitem.getProduct().getName());
             System.out.println(incomingLineitem.getQuantity());
-            inventory.getStockLineitems().add(incomingLineitem);
+
         }
         System.out.println(incomingDelivery.getIncomingLineitems().size());
-        inventoryRepository.save(inventory);
+
+
+        mergeToStockRepository(incomingDelivery);
     }
 
-    public void incomingCompleted(Inventory inventory, IncomingDelivery incomingDelivery) throws Exception {
-        if(incomingDelivery.getStatus()==Status.PROCESSING){
+
+
+    public void mergeToStockRepository(IncomingDelivery incomingDelivery) {
+        Stock stock = stockService.getStock();
+
+        List<Lineitem> newStockLineitems = new ArrayList<>();
+
+        List<Long> idOfNewStockProducts = new ArrayList<>();
+
+        List<Long> idOfStockProducts = new ArrayList<>();
+        for (Lineitem stockLineitem : stock.getStockLineitems()) {
+            idOfStockProducts.add(stockLineitem.getProduct().getId());
+        }
+
+        for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {
+            if(idOfNewStockProducts.contains(incomingLineitem.getProduct().getId())){
+                for (Lineitem newStockLineitem : newStockLineitems) {
+                    if (newStockLineitem.getProduct().getId() ==incomingLineitem.getProduct().getId()){
+                        int sum = newStockLineitem.getQuantity();
+                        sum += incomingLineitem.getQuantity();
+                        incomingLineitem.setMergedToStock(true);
+                        newStockLineitem.setQuantity(sum);
+                        break;
+                    }
+                }
+            }
+            else if(idOfStockProducts.contains(incomingLineitem.getProduct().getId())){
+                for (Lineitem stockLineitem : stock.getStockLineitems()) {
+                    if (stockLineitem.getProduct().getId() ==incomingLineitem.getProduct().getId()){
+                        int sum = stockLineitem.getQuantity();
+                        sum += incomingLineitem.getQuantity();
+                        incomingLineitem.setMergedToStock(true);
+                        stockLineitem.setQuantity(sum);
+                        break;
+                    }
+                }
+            } else {
+                System.out.println("BUILDING");
+                Lineitem lineitem = Lineitem.builder()
+                        .product(incomingLineitem.getProduct())
+                        .quantity(incomingLineitem.getQuantity())
+                        .mergedToStock(true)
+                        .build();
+                newStockLineitems.add(lineitem);
+                idOfNewStockProducts.add(lineitem.getProduct().getId());
+            }
+        }
+        System.out.println("ADDING");
+        stock.getStockLineitems().addAll(newStockLineitems);
+        stockRepository.save(stock);
+    }
+
+
+
+
+
+
+    public void incomingCompleted(IncomingDelivery incomingDelivery) throws Exception {
+        if(incomingDelivery.getStatus()==Status.COMPLETED){
             throw new Exception("This delivery is already added");
         } else {
-            addToInventory(inventory, incomingDelivery);
+            addToInventory(incomingDelivery);
             incomingDelivery.setStatus(Status.COMPLETED);
             incomingDeliveryRepository.save(incomingDelivery);
         }

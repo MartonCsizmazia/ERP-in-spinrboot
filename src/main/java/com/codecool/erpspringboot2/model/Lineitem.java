@@ -22,6 +22,7 @@ public class Lineitem {
     private Product product;
     private int quantity;
 
+    private boolean mergedToStock = false;
 
     private long fakeDeliveryKey;
 
@@ -33,8 +34,7 @@ public class Lineitem {
     private Long IDofInventory;
     private Long IDofUserOrder;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private Inventory inventory;
+
 /*
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private UserOrder userOrder;
