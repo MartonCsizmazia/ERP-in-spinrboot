@@ -109,11 +109,14 @@ public class IncomingDeliveryService {
         List<String> nameList = new ArrayList<>();
 
         for (Product product : productList) {
+
             nameList.add(product.getName());
         }
-
+        System.out.println(nameList);
+        System.out.println(productList);
         for (Lineitem incomingLineitem : paramincomingLineitems) {
             if(productList.contains(incomingLineitem.getProduct())) {
+
                 Lineitem lineitem = Lineitem.builder()
                         .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
                         .product(incomingLineitem.getProduct())
@@ -124,8 +127,9 @@ public class IncomingDeliveryService {
                 //NE SAVELD, KÜLÖNBEN
                 //PersistentObjectException: detached entity passed to persist
             } else {
+
                 if(nameList.contains(incomingLineitem.getProduct().getName())){
-                    throw new Exception("There is already a Oroduct with this name");
+                    throw new Exception("There is already a product with this name");
                 }
                 Product product = Product.builder()
                         .name(incomingLineitem.getProduct().getName())

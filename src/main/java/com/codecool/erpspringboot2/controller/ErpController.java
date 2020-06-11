@@ -26,7 +26,7 @@ public class ErpController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/incoming-delivery")
+    @GetMapping("/incoming-deliveries")
     public List<IncomingDelivery> displayAllIncomingDelivery(){
         return incomingDeliveryService.getAllIncomingDelivery();
     }

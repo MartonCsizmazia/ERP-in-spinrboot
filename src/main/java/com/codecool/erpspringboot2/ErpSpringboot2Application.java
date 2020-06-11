@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @SpringBootApplication
 public class ErpSpringboot2Application {
-
+    //////////////DONT FORGET TO MAKE THE REPOSITORY PUBLIC
     public static void main(String[] args) {
         SpringApplication.run(ErpSpringboot2Application.class, args);
     }
