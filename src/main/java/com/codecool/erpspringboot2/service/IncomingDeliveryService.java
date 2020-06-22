@@ -31,6 +31,8 @@ public class IncomingDeliveryService {
     @Autowired
     private ExpenseRepository expenseRepository;
 
+    @Autowired SupplierRepository supplierRepository;
+
     public List<IncomingDelivery> getAllIncomingDelivery(){
         return incomingDeliveryRepository.findAll();
     }
@@ -171,6 +173,7 @@ public class IncomingDeliveryService {
                 .status(paramIncomingDelivery.getStatus())
                 .incomingLineitems(incomingLineitems)
                 .date(date)
+                .supplier(supplierRepository.findAllById(6818988865754323832L))
                 .build();
 
         /*NOT WORKING(stack owerlow)

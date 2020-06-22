@@ -38,6 +38,9 @@ public class ErpSpringboot2Application {
     @Autowired
     private ExpenseRepository expenseRepository;
 
+    @Autowired
+    private SupplierRepository supplierRepository;
+
     @Bean
     @Profile("production")
     public CommandLineRunner init (){
@@ -176,9 +179,11 @@ public class ErpSpringboot2Application {
             stockRepository.save(stock);
 
             Supplier supplier = Supplier.builder()
+                    .id(6818988865754323832L)
                     .name("Kedvenc Nagyker")
                     .address("Budapest, Józsefvárosi piac")
                     .build();
+            supplierRepository.save(supplier);
 
             cargoPrinter(stock);
         };
