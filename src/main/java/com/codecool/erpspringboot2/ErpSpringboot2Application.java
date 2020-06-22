@@ -121,6 +121,7 @@ public class ErpSpringboot2Application {
                     lineitem3.getProduct().getPrice()*lineitem3.getQuantity();
             Expense expense = Expense.builder()
                     .name("First delivery")
+                    .paid(false)
                     .value(price)
                     .build();
             expenseRepository.save(expense);
