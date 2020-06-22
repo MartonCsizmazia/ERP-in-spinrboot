@@ -3,7 +3,7 @@ package com.codecool.erpspringboot2.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,7 +20,7 @@ public class IncomingDelivery {
     @OneToOne
     private Supplier supplier;
 
-    private LocalDate date;
+    private String date;
     private long fakePrimaryKey;
 
     @Enumerated(EnumType.STRING)

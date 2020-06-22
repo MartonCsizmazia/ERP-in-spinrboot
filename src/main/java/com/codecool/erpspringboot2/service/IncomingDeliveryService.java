@@ -5,7 +5,9 @@ import com.codecool.erpspringboot2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -151,8 +153,14 @@ public class IncomingDeliveryService {
             price += incomingLineitem.getProduct().getPrice()*incomingLineitem.getQuantity();
         }
 
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        String date = formatter.format(new Date(System.currentTimeMillis()));
+
         Expense expense = Expense.builder()
+                .name(date + " delivery")
                 .value(price)
+                .paid(false)
+                .date(date)
                 .build();
         expenseRepository.save(expense);
 
@@ -160,7 +168,9 @@ public class IncomingDeliveryService {
                 .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
                 .status(paramIncomingDelivery.getStatus())
                 .incomingLineitems(incomingLineitems)
+                .date(date)
                 .build();
+
 
         /*NOT WORKING(stack owerlow)
         for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {

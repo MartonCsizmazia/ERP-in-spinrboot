@@ -16,4 +16,6 @@ public class ExpenseService {
     public List<Expense> getAllExpenses(){
         return expenseRepository.findAll();
     }
+
+
 }

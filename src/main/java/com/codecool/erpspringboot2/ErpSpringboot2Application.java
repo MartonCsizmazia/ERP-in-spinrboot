@@ -120,6 +120,7 @@ public class ErpSpringboot2Application {
                     lineitem2.getProduct().getPrice()*lineitem2.getQuantity()+
                     lineitem3.getProduct().getPrice()*lineitem3.getQuantity();
             Expense expense = Expense.builder()
+                    .name("First delivery")
                     .value(price)
                     .build();
             expenseRepository.save(expense);
@@ -160,8 +161,6 @@ public class ErpSpringboot2Application {
             lineitemRepository.save(lineitem4);
             lineitemRepository.save(lineitem5);
             lineitemRepository.save(lineitem6);
-
-
 
 
             Lineitem lineitem7 = Lineitem.builder()

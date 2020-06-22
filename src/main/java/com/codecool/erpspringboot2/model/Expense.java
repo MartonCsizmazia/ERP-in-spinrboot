@@ -18,12 +18,11 @@ public class Expense {
     @GeneratedValue
     private Long id;
 
-    private boolean PAID = false;
+    private boolean paid;
 
+    private String stringPaid = String.valueOf(paid);
     private String name;
     private int value;
-    private LocalDate date;
-
-
+    private String date;
 
 }
