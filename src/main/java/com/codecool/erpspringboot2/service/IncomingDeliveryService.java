@@ -87,7 +87,6 @@ public class IncomingDeliveryService {
         stockRepository.save(stock);
     }
 
-
     public void incomingCompleted(IncomingDelivery incomingDelivery) throws Exception {
         if(incomingDelivery.getStatus()==Status.COMPLETED){
             throw new Exception("This delivery is already added");
@@ -156,6 +155,8 @@ public class IncomingDeliveryService {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         String date = formatter.format(new Date(System.currentTimeMillis()));
 
+
+
         Expense expense = Expense.builder()
                 .name(date + " delivery")
                 .value(price)
@@ -166,11 +167,11 @@ public class IncomingDeliveryService {
 
         IncomingDelivery incomingDelivery = IncomingDelivery.builder()
                 .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
+                .incomingDeliveryExpense(expense)
                 .status(paramIncomingDelivery.getStatus())
                 .incomingLineitems(incomingLineitems)
                 .date(date)
                 .build();
-
 
         /*NOT WORKING(stack owerlow)
         for (Lineitem incomingLineitem : incomingDelivery.getIncomingLineitems()) {

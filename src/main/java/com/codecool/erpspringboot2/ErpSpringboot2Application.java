@@ -175,6 +175,11 @@ public class ErpSpringboot2Application {
                     .build();
             stockRepository.save(stock);
 
+            Supplier supplier = Supplier.builder()
+                    .name("Kedvenc Nagyker")
+                    .address("Budapest, Józsefvárosi piac")
+                    .build();
+
             cargoPrinter(stock);
         };
     }
