@@ -158,6 +158,16 @@ public class AllRepositoryTest {
         customerRepository.saveAndFlush(john);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void customerNameShouldBeNotNull(){
+        Customer john = Customer.builder()
+                .email("lala@lala.hu")
+                .address("Nagymezo street 44")
+                .build();
+
+        customerRepository.saveAndFlush(john);
+    }
+
     @Test
     public void productIsPersistedWithLineitem() {
 
@@ -294,12 +304,12 @@ public class AllRepositoryTest {
 
         productRepository.save(doomEternal);
 
-
-
         List<Product> products = productRepository.findAll();
         assertThat(products).hasSize(1);
 
     }
+
+
 
 
 }
