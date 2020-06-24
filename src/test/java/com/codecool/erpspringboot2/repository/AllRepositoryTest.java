@@ -2,6 +2,7 @@ package com.codecool.erpspringboot2.repository;
 
 import com.codecool.erpspringboot2.model.*;
 import com.codecool.erpspringboot2.service.IdCreator;
+import com.codecool.erpspringboot2.service.SupplierService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class AllRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
 
     @Test
     public void saveOneIncomingDelivery(){
@@ -146,6 +150,31 @@ public class AllRepositoryTest {
                 .build();
 
         customerRepository.saveAndFlush(john);
+    }
+
+    @Test
+    public void supplierIsPersistedWithIncomingDelivery() {
+
+        Supplier dasSupplier = Supplier.builder()
+                .id(6818988L)
+                .name("Kedvenc Nagyker")
+                .address("Budapest, Józsefvárosi piac")
+                .build();
+
+
+        IncomingDelivery incomingDelivery = IncomingDelivery.builder()
+                .supplier(dasSupplier)
+                .status(Status.ENROUTE)
+                .build();
+
+        incomingDeliveryRepository.save(incomingDelivery);
+
+        List<Supplier> suppliers = supplierRepository.findAll();
+        assertThat(suppliers)
+                .hasSize(1)
+                .allMatch(supplier1 -> supplier1.getId() > 0L);
+
+
     }
 
 

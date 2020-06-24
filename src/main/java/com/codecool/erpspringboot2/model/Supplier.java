@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +20,11 @@ public class Supplier {
 
     @NonNull
     private String name;
+
+    @OneToOne(mappedBy = "supplier")
+    @EqualsAndHashCode.Exclude
+    private IncomingDelivery incomingDelivery;
+
     private String address;
     private int rating;
 
