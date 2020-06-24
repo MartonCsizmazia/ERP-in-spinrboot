@@ -1,7 +1,6 @@
 package com.codecool.erpspringboot2.repository;
 
-import com.codecool.erpspringboot2.model.Lineitem;
-import com.codecool.erpspringboot2.model.Product;
+import com.codecool.erpspringboot2.model.*;
 import com.codecool.erpspringboot2.service.IdCreator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +11,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.criteria.CriteriaBuilder;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -25,6 +28,15 @@ public class AllRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private LineitemRepository lineitemRepository;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     @Test
     public void saveOneIncomingDelivery(){
@@ -47,6 +59,9 @@ public class AllRepositoryTest {
                 .price(4000)
                 .profit(1.15)
                 .build();
+        productRepository.save(doomEternal);
+        productRepository.save(doom2016);
+        productRepository.save(modernWarfare);
 
         IdCreator.fakeDeliveryNumber += 1;
         Lineitem lineitem1 = Lineitem.builder()
@@ -64,6 +79,33 @@ public class AllRepositoryTest {
                 .product(modernWarfare)
                 .quantity(20)
                 .build();
+
+        int price = lineitem1.getProduct().getPrice()*lineitem1.getQuantity()+
+                lineitem2.getProduct().getPrice()*lineitem2.getQuantity()+
+                lineitem3.getProduct().getPrice()*lineitem3.getQuantity();
+        Expense expense = Expense.builder()
+                .name("First delivery")
+                .paid(false)
+                .value(price)
+                .build();
+
+        expenseRepository.save(expense);
+
+        IncomingDelivery incomingDelivery = IncomingDelivery.builder()
+                .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
+                .incomingDeliveryExpense(expense)
+                .incomingLineitem(lineitem1)
+                .incomingLineitem(lineitem2)
+                .incomingLineitem(lineitem3)
+                .status(Status.ENROUTE)
+                .build();
+
+
+
+        incomingDeliveryRepository.save(incomingDelivery);
+
+        List<IncomingDelivery> incomingDeliveryList = incomingDeliveryRepository.findAll();
+        assertThat(incomingDeliveryList).hasSize(1);
 
 
     }
