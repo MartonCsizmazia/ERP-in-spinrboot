@@ -47,6 +47,9 @@ public class AllRepositoryTest {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    @Autowired
+    private UserOrderRepository userOrderRepository;
+
     @Test
     public void saveOneIncomingDelivery(){
 
@@ -226,6 +229,8 @@ public class AllRepositoryTest {
         UserOrder userOrder = UserOrder.builder()
                 .outgoingLineitem(lineitem1)
                 .build();
+
+        userOrderRepository.save(userOrder);
 
         List<Lineitem> lineitems = lineitemRepository.findAll();
         assertThat(lineitems)
