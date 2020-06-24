@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,6 +38,9 @@ public class AllRepositoryTest {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Test
     public void saveOneIncomingDelivery(){
@@ -106,8 +110,32 @@ public class AllRepositoryTest {
 
         List<IncomingDelivery> incomingDeliveryList = incomingDeliveryRepository.findAll();
         assertThat(incomingDeliveryList).hasSize(1);
-
-
     }
+
+    @Test
+    public void saveUniqueCustomerEmailTwice(){
+
+        Customer barbara = Customer.builder()
+                .name("Barbara")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1992,10,1))
+                .email("lala@lala.hu")
+                .dateOfRegistration(LocalDate.now())
+                .phoneNumber("063043563")
+                .build();
+
+        Customer john = Customer.builder()
+                .name("John")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1991,10,1))
+                .email("lala@lala.hu")
+                .dateOfRegistration(LocalDate.now())
+                .phoneNumber("06335555")
+                .build();
+
+        customerRepository.save(barbara);
+        customerRepository.save(john);
+    }
+
 
 }
