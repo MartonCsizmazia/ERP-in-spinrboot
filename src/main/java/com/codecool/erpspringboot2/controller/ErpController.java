@@ -85,4 +85,6 @@ public class ErpController {
         IncomingDelivery incomingDelivery = this.incomingDeliveryService.getIncomingDeliveryById(id);
         incomingDeliveryService.incomingCompleted(incomingDelivery);
     }
+
+
 }
