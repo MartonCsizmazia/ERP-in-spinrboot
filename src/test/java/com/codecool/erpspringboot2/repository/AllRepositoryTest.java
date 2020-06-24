@@ -176,9 +176,36 @@ public class AllRepositoryTest {
                 .allMatch(supplier1 -> supplier1.getId() > 0L);
     }
 
+    @Test
+    public void lineitemIsPersistedWithIncomingDelivery(){
 
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
+                .build();
 
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
 
+        IncomingDelivery incomingDelivery = IncomingDelivery.builder()
+                .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
+                .incomingLineitem(lineitem1)
+                .status(Status.ENROUTE)
+                .build();
+
+        incomingDeliveryRepository.save(incomingDelivery);
+
+        List<Lineitem> lineitems = lineitemRepository.findAll();
+        assertThat(lineitems)
+                .hasSize(1)
+                .allMatch(supplier1 -> supplier1.getId() > 0L);
+
+    }
 
 
 }
