@@ -309,6 +309,35 @@ public class AllRepositoryTest {
 
     }
 
+    @Test
+    public void customerIdIsGeneratedValue(){
+
+        Customer barbara = Customer.builder()
+                .name("Barbara")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1992,10,1))
+                .email("lala@lala.hu")
+                .dateOfRegistration(LocalDate.now())
+                .phoneNumber("063043563")
+                .build();
+
+        Customer john = Customer.builder()
+                .name("John")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1991,10,1))
+                .email("hahaha@lala.hu")
+                .dateOfRegistration(LocalDate.now())
+                .phoneNumber("06335555")
+                .build();
+
+        customerRepository.save(barbara);
+        customerRepository.saveAndFlush(john);
+
+        List<Customer> customers = customerRepository.findAll();
+        assertNotEquals(customers.get(0).getId(), customers.get(1).getId());
+
+    }
+
 
 
 
