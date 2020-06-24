@@ -50,6 +50,9 @@ public class AllRepositoryTest {
     @Autowired
     private UserOrderRepository userOrderRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @Test
     public void saveOneIncomingDelivery(){
 
@@ -236,6 +239,66 @@ public class AllRepositoryTest {
         assertThat(lineitems)
                 .hasSize(1)
                 .allMatch(supplier1 -> supplier1.getId() > 0L);
+    }
+
+    @Test
+    public void saveCustomer(){
+
+        Customer barbara = Customer.builder()
+                .name("Barbara")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1992,10,1))
+                .email("lala@lala.hu")
+                .dateOfRegistration(LocalDate.now())
+                .phoneNumber("063043563")
+                .build();
+
+        customerRepository.save(barbara);
+
+        List<Customer> customers = customerRepository.findAll();
+        assertThat(customers).hasSize(1);
+
+    }
+
+    @Test
+    public void saveEmployee(){
+
+        Employee porta = Employee.builder()
+                .name("portás Józsi")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1983,10,1))
+                .email("sfadgdhg@lala.hu")
+                .dateOfEmployment(LocalDate.now())
+                .phoneNumber("063055474543")
+                .salary(400000)
+                .build();
+
+        employeeRepository.save(porta);
+
+
+
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees).hasSize(1);
+
+    }
+
+    @Test
+    public void saveProduct(){
+
+        Product doomEternal = Product.builder()
+                .manufacturer("EA")
+                .name("Doom Eternal")
+                .price(5000)
+                .profit(1.1)
+                .build();
+
+        productRepository.save(doomEternal);
+
+
+
+        List<Product> products = productRepository.findAll();
+        assertThat(products).hasSize(1);
+
     }
 
 
