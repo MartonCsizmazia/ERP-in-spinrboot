@@ -28,6 +28,9 @@ public class ErpController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private SupplierService supplierService;
+
     @GetMapping("/incoming-deliveries")
     public List<IncomingDelivery> displayAllIncomingDelivery(){
         return incomingDeliveryService.getAllIncomingDelivery();
@@ -46,6 +49,11 @@ public class ErpController {
     @GetMapping("/customers")
     public List<Customer> displayAllCustomers(){
         return customerService.getAllCustomers();
+    }
+
+    @GetMapping("/suppliers")
+    public List<Supplier> displayAllSuppliers(){
+        return supplierService.getAllSuppliers();
     }
 
     @GetMapping("/incoming-delivery/uncompleted")
