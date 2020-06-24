@@ -156,11 +156,9 @@ public class AllRepositoryTest {
     public void supplierIsPersistedWithIncomingDelivery() {
 
         Supplier dasSupplier = Supplier.builder()
-                .id(6818988L)
                 .name("Kedvenc Nagyker")
                 .address("Budapest, Józsefvárosi piac")
                 .build();
-
 
         IncomingDelivery incomingDelivery = IncomingDelivery.builder()
                 .supplier(dasSupplier)
