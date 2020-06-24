@@ -48,6 +48,23 @@ public class AllRepositoryTest {
                 .profit(1.15)
                 .build();
 
+        IdCreator.fakeDeliveryNumber += 1;
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
+        Lineitem lineitem2 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doomEternal)
+                .quantity(20)
+                .build();
+        Lineitem lineitem3 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(modernWarfare)
+                .quantity(20)
+                .build();
+
 
     }
 
