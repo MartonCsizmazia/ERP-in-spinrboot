@@ -138,6 +138,16 @@ public class AllRepositoryTest {
         customerRepository.saveAndFlush(john);
     }
 
+    @Test(expected = DataIntegrityViolationException.class)
+    public void customerEmailShouldBeNotNull(){
+        Customer john = Customer.builder()
+                .name("John")
+                .address("Nagymezo street 44")
+                .build();
+
+        customerRepository.saveAndFlush(john);
+    }
+
 
 
 
