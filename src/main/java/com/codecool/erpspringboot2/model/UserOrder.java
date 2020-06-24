@@ -27,8 +27,8 @@ public class UserOrder {
 
     @Singular
     @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = {CascadeType.REMOVE})
-    private List<Lineitem> outgoingLineitems = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Lineitem> outgoingLineitems;
 
     private static List<UserOrder> listOfOrders = new ArrayList<>();
 

@@ -31,6 +31,10 @@ public class Lineitem {
     //@ManyToOne
     private IncomingDelivery incomingDelivery;
 
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    //@ManyToOne
+    private UserOrder userOrder;
+
     private Long IDofIncomingDelivery;
 
     private Long IDofUserOrder;

@@ -207,5 +207,31 @@ public class AllRepositoryTest {
 
     }
 
+    @Test
+    public void lineitemIsPersistedWithUserOrder(){
+
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
+                .build();
+
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
+
+        UserOrder userOrder = UserOrder.builder()
+                .outgoingLineitem(lineitem1)
+                .build();
+
+        List<Lineitem> lineitems = lineitemRepository.findAll();
+        assertThat(lineitems)
+                .hasSize(1)
+                .allMatch(supplier1 -> supplier1.getId() > 0L);
+    }
+
 
 }
