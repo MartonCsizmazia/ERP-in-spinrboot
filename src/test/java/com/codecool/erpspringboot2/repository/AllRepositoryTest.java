@@ -155,24 +155,25 @@ public class AllRepositoryTest {
     @Test
     public void supplierIsPersistedWithIncomingDelivery() {
 
-        Supplier dasSupplier = Supplier.builder()
-                .name("Kedvenc Nagyker")
-                .address("Budapest, Józsefvárosi piac")
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
                 .build();
 
-        IncomingDelivery incomingDelivery = IncomingDelivery.builder()
-                .supplier(dasSupplier)
-                .status(Status.ENROUTE)
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
                 .build();
 
-        incomingDeliveryRepository.save(incomingDelivery);
+        lineitemRepository.save(lineitem1);
 
-        List<Supplier> suppliers = supplierRepository.findAll();
-        assertThat(suppliers)
+        List<Product> products = productRepository.findAll();
+        assertThat(products)
                 .hasSize(1)
                 .allMatch(supplier1 -> supplier1.getId() > 0L);
-
-
     }
 
 

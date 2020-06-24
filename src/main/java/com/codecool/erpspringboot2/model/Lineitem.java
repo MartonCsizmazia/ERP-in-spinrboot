@@ -20,7 +20,7 @@ public class Lineitem {
 
     private int quantity;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Product product;
 
     private boolean mergedToStock = false;
