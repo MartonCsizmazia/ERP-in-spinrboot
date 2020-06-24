@@ -153,7 +153,7 @@ public class AllRepositoryTest {
     }
 
     @Test
-    public void supplierIsPersistedWithIncomingDelivery() {
+    public void productIsPersistedWithLineitem() {
 
         Product doom2016 = Product.builder()
                 .manufacturer("EA")
@@ -175,6 +175,8 @@ public class AllRepositoryTest {
                 .hasSize(1)
                 .allMatch(supplier1 -> supplier1.getId() > 0L);
     }
+
+
 
 
 
