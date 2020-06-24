@@ -1,6 +1,6 @@
 package com.codecool.erpspringboot2.service;
 
-import com.codecool.erpspringboot2.model.IncomingDelivery;
+
 import com.codecool.erpspringboot2.model.Product;
 import com.codecool.erpspringboot2.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

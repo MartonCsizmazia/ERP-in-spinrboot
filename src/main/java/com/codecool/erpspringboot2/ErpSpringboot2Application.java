@@ -41,6 +41,9 @@ public class ErpSpringboot2Application {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @Bean
     @Profile("production")
     public CommandLineRunner init (){
@@ -94,10 +97,22 @@ public class ErpSpringboot2Application {
                     .phoneNumber("06304356145")
                     .build();
 
-            //if in comment, entites are not saved
+            //if in comment, entites are not saved below
             customerRepository.save(barbara);
             customerRepository.save(john);
             customerRepository.save(jane);
+
+            Employee porta = Employee.builder()
+                    .name("portás Józsi")
+                    .address("Nagymezo street 44")
+                    .birthDate(LocalDate.of(1983,10,1))
+                    .email("sfadgdhg@lala.hu")
+                    .dateOfEmployment(LocalDate.now())
+                    .phoneNumber("063055474543")
+                    .salary(400000)
+                    .build();
+
+            employeeRepository.save(porta);
 
             IdCreator.fakeDeliveryNumber += 1;
             Lineitem lineitem1 = Lineitem.builder()
