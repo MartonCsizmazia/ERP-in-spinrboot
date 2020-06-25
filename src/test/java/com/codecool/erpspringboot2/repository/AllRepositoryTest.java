@@ -26,6 +26,14 @@ import static org.junit.Assert.*;
 @ActiveProfiles("test")
 public class AllRepositoryTest {
 
+    //supplierpersistedwithincomingdeliery
+    //lineitemispersistedwithstock
+    //saveuserorder
+    //savelineiteam
+    //savestock
+    //savesupplier
+
+
     @Autowired
     private IncomingDeliveryRepository incomingDeliveryRepository;
 
