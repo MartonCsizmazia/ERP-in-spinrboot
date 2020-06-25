@@ -168,6 +168,22 @@ public class AllRepositoryTest {
         customerRepository.saveAndFlush(john);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void employeeNameShouldBeNotNull(){
+        Employee porta = Employee.builder()
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1983,10,1))
+                .email("sfadgdhg@lala.hu")
+                .dateOfEmployment(LocalDate.now())
+                .phoneNumber("063055474543")
+                .salary(400000)
+                .build();
+
+        employeeRepository.save(porta);
+    }
+
+
+
     @Test
     public void productIsPersistedWithLineitem() {
 
