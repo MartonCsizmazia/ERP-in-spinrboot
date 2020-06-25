@@ -27,8 +27,6 @@ import static org.junit.Assert.*;
 public class AllRepositoryTest {
 
     //
-    //lineitemispersistedwithstock
-    //saveuserorder
     //savelineiteam
     //savestock
     //savesupplier
@@ -132,6 +130,35 @@ public class AllRepositoryTest {
 
         List<IncomingDelivery> incomingDeliveryList = incomingDeliveryRepository.findAll();
         assertThat(incomingDeliveryList).hasSize(1);
+
+
+    }
+
+    @Test
+    public void saveUserOrder(){
+
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
+                .build();
+
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
+
+        UserOrder userOrder = UserOrder.builder()
+                .outgoingLineitem(lineitem1)
+                .build();
+
+        userOrderRepository.save(userOrder);
+
+        List<UserOrder> userOrders = userOrderRepository.findAll();
+        assertThat(userOrders).hasSize(1);
+
     }
 
     @Test(expected = DataIntegrityViolationException.class)
