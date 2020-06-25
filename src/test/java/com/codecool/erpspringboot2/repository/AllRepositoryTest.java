@@ -27,8 +27,8 @@ import static org.junit.Assert.*;
 public class AllRepositoryTest {
 
     //
-    //savelineiteam
-    //savestock
+    //
+    //
     //savesupplier
 
 
@@ -158,6 +158,28 @@ public class AllRepositoryTest {
 
         List<UserOrder> userOrders = userOrderRepository.findAll();
         assertThat(userOrders).hasSize(1);
+
+    }
+
+    @Test
+    public void savelineItem(){
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
+                .build();
+
+        Lineitem lineitem = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
+
+        lineitemRepository.save(lineitem);
+
+        List<Lineitem> lineitems = lineitemRepository.findAll();
+        assertThat(lineitems).hasSize(1);
 
     }
 
