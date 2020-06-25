@@ -61,6 +61,9 @@ public class AllRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
+
     @Test
     public void saveOneIncomingDelivery(){
 
@@ -191,6 +194,34 @@ public class AllRepositoryTest {
     }
 
     @Test
+    public void lineitemIsPersistedWithStock(){
+        Product doom2016 = Product.builder()
+                .manufacturer("EA")
+                .name("Doom 2016")
+                .price(3000)
+                .profit(1.14)
+                .build();
+
+        Lineitem lineitem1 = Lineitem.builder()
+                .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
+                .product(doom2016)
+                .quantity(20)
+                .build();
+
+        Stock stock = Stock.builder()
+                .stockLineitem(lineitem1)
+                .build();
+        stockRepository.save(stock);
+
+        List<Lineitem> lineitems = lineitemRepository.findAll();
+        assertThat(lineitems)
+                .hasSize(1)
+                .allMatch(lineitem -> lineitem.getId() > 0L);
+
+    }
+
+    /*
+    @Test
     public void supplierIsPersistedWithIncomingdeliery(){
         Supplier supplier = Supplier.builder()
                 .id(6818988865754323832L)
@@ -211,6 +242,8 @@ public class AllRepositoryTest {
                 .hasSize(1)
                 .allMatch(supplier1 -> supplier1.getId() > 0L);
     }
+
+     */
 
     @Test
     public void productIsPersistedWithLineitem() {
