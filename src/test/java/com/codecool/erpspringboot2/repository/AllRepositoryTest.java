@@ -354,6 +354,36 @@ public class AllRepositoryTest {
 
     }
 
+    @Test(expected = DataIntegrityViolationException.class)
+    public void saveUniqueEmployeeEmailTwice(){
+
+        Employee porta = Employee.builder()
+                .name("portás Józsi")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1983,10,1))
+                .email("sfadgdhg@lala.hu")
+                .dateOfEmployment(LocalDate.now())
+                .phoneNumber("063055474543")
+                .salary(400000)
+                .build();
+
+        employeeRepository.save(porta);
+
+        Employee porta2 = Employee.builder()
+                .name("portás Józsi")
+                .address("Nagymezo street 44")
+                .birthDate(LocalDate.of(1983,10,1))
+                .email("sfadgdhg@lala.hu")
+                .dateOfEmployment(LocalDate.now())
+                .phoneNumber("063055474543")
+                .salary(400000)
+                .build();
+
+        employeeRepository.saveAndFlush(porta2);
+
+
+    }
+
 
 
 
