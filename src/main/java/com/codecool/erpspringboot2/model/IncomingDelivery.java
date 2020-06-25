@@ -17,7 +17,7 @@ public class IncomingDelivery {
     @GeneratedValue
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Supplier supplier;
 
     private String date;

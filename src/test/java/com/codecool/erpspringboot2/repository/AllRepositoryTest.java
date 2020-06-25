@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 @ActiveProfiles("test")
 public class AllRepositoryTest {
 
-    //supplierpersistedwithincomingdeliery
+    //
     //lineitemispersistedwithstock
     //saveuserorder
     //savelineiteam
@@ -190,7 +190,27 @@ public class AllRepositoryTest {
         employeeRepository.save(porta);
     }
 
+    @Test
+    public void supplierIsPersistedWithIncomingdeliery(){
+        Supplier supplier = Supplier.builder()
+                .id(6818988865754323832L)
+                .name("Nagykeres")
+                .address("Budapest, Józsefvárosi piac")
+                .build();
 
+        IncomingDelivery incomingDelivery = IncomingDelivery.builder()
+                .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
+                .supplier(supplier)
+                .status(Status.ENROUTE)
+                .build();
+
+        incomingDeliveryRepository.save(incomingDelivery);
+
+        List<Supplier> suppliers = supplierRepository.findAll();
+        assertThat(suppliers)
+                .hasSize(1)
+                .allMatch(supplier1 -> supplier1.getId() > 0L);
+    }
 
     @Test
     public void productIsPersistedWithLineitem() {
@@ -213,7 +233,7 @@ public class AllRepositoryTest {
         List<Product> products = productRepository.findAll();
         assertThat(products)
                 .hasSize(1)
-                .allMatch(supplier1 -> supplier1.getId() > 0L);
+                .allMatch(product1 -> product1.getId() > 0L);
     }
 
     @Test
@@ -226,7 +246,7 @@ public class AllRepositoryTest {
                 .profit(1.14)
                 .build();
 
-        Lineitem lineitem1 = Lineitem.builder()
+        Lineitem lineitem = Lineitem.builder()
                 .fakeDeliveryKey(IdCreator.fakeDeliveryNumber)
                 .product(doom2016)
                 .quantity(20)
@@ -234,7 +254,7 @@ public class AllRepositoryTest {
 
         IncomingDelivery incomingDelivery = IncomingDelivery.builder()
                 .fakePrimaryKey(IdCreator.fakeDeliveryNumber)
-                .incomingLineitem(lineitem1)
+                .incomingLineitem(lineitem)
                 .status(Status.ENROUTE)
                 .build();
 
@@ -243,7 +263,7 @@ public class AllRepositoryTest {
         List<Lineitem> lineitems = lineitemRepository.findAll();
         assertThat(lineitems)
                 .hasSize(1)
-                .allMatch(supplier1 -> supplier1.getId() > 0L);
+                .allMatch(lineitem1 -> lineitem1.getId() > 0L);
 
     }
 
@@ -272,7 +292,7 @@ public class AllRepositoryTest {
         List<Lineitem> lineitems = lineitemRepository.findAll();
         assertThat(lineitems)
                 .hasSize(1)
-                .allMatch(supplier1 -> supplier1.getId() > 0L);
+                .allMatch(lineitem -> lineitem.getId() > 0L);
     }
 
     @Test
