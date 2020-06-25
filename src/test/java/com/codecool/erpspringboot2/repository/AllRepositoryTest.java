@@ -381,6 +381,18 @@ public class AllRepositoryTest {
 
         employeeRepository.saveAndFlush(porta2);
 
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void supplierNameShouldBeNotNull(){
+        Supplier supplier = Supplier.builder()
+                .id(6818988865754323832L)
+                .address("Budapest, Józsefvárosi piac")
+                .build();
+
+
+        supplierRepository.save(supplier);
+
 
     }
 
